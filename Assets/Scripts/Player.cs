@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private CharacterController body;
+    [SerializeField] private PlayerAnimator animator;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float rotationSpeed = 25f;
 
@@ -15,6 +16,8 @@ public class Player : MonoBehaviour
 
         var forward = Vector3.Slerp(body.transform.forward, direction, Time.deltaTime * rotationSpeed);
         body.transform.forward = forward;
+
+        animator.IsWalking = direction != Vector3.zero;
     }
 
 
