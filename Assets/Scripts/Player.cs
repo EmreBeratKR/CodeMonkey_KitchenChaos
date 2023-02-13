@@ -1,3 +1,4 @@
+using EmreBeratKR.ServiceLocator;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -11,40 +12,34 @@ public class Player : MonoBehaviour
     private void Update()
     {
         var direction = GetDirectionNormalized();
-        var motion = direction * (moveSpeed * Time.deltaTime);
-        body.Move(motion);
-
-        var forward = Vector3.Slerp(body.transform.forward, direction, Time.deltaTime * rotationSpeed);
-        body.transform.forward = forward;
-
-        animator.IsWalking = direction != Vector3.zero;
+        
+        UpdatePosition(direction);
+        UpdateRotation(direction);
+        UpdateAnimator(direction);
     }
 
 
-    private Vector3 GetDirectionNormalized()
+    private void UpdatePosition(Vector3 direction)
     {
-        var direction = Vector3.zero;
-        
-        if (Input.GetKey(KeyCode.D))
-        {
-            direction.x = 1f;
-        }
+        var motion = direction * (moveSpeed * Time.deltaTime);
+        body.Move(motion);
+    }
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            direction.x = -1;
-        }
+    private void UpdateRotation(Vector3 direction)
+    {
+        var forward = Vector3.Slerp(body.transform.forward, direction, Time.deltaTime * rotationSpeed);
+        body.transform.forward = forward;
+    }
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            direction.z = 1f;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            direction.z = -1f;
-        }
-
-        return direction.normalized;
+    private void UpdateAnimator(Vector3 direction)
+    {
+        animator.IsWalking = direction != Vector3.zero;
+    }
+    
+    private static Vector3 GetDirectionNormalized()
+    {
+        return ServiceLocator
+            .Get<GameInput>()
+            .GetDirectionNormalized();
     }
 }
