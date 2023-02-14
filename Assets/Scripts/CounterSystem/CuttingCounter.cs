@@ -5,11 +5,12 @@ using UnityEngine;
 
 namespace CounterSystem
 {
-    public class CuttingCounter : Counter
+    public class CuttingCounter : Counter, IProgressProvider
     {
         [SerializeField] private CuttingRecipeBookSO recipeBook;
 
-
+        
+        public Action<float> OnProgressChanged { get; set; }
         public event Action OnCut;
         
 
@@ -43,9 +44,11 @@ namespace CounterSystem
             {
                 m_CurrentRecipe = recipe;
                 m_CurrentCut = 0;
+                OnProgressChanged?.Invoke(0f);
             }
 
             m_CurrentCut += 1;
+            OnProgressChanged?.Invoke(Mathf.InverseLerp(0f, recipe.CutCount, m_CurrentCut));
 
             if (m_CurrentCut >= m_CurrentRecipe.CutCount)
             {
@@ -55,6 +58,7 @@ namespace CounterSystem
                 TryPutKitchenObject(output);
                 m_CurrentRecipe = null;
                 m_CurrentCut = 0;
+                OnProgressChanged?.Invoke(0f);
             }
 
             return true;
