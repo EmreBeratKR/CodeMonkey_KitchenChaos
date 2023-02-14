@@ -15,7 +15,7 @@ namespace CounterSystem
             if (IsFull) return false;
 
             m_KitchenObject = kitchenObject;
-            kitchenObject.SetParent(this);
+            kitchenObject.SetSlot(this);
 
             return true;
         }

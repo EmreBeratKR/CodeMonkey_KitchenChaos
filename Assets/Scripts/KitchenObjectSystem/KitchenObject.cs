@@ -4,10 +4,14 @@ using UnityEngine;
 public class KitchenObject : MonoBehaviour
 {
     [SerializeField] private KitchenObjectSO kitchenObject;
+
+
+    private KitchenObjectSlot m_Slot;
     
     
-    public void SetParent(KitchenObjectSlot slot)
+    public void SetSlot(KitchenObjectSlot slot)
     {
+        m_Slot = slot;
         transform.parent = slot.transform;
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
