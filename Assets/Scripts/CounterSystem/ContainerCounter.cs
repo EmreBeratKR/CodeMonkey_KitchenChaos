@@ -1,3 +1,4 @@
+using System;
 using KitchenObjectSystem;
 using PlayerSystem;
 using UnityEngine;
@@ -9,11 +10,21 @@ namespace CounterSystem
         [SerializeField] private KitchenObjectSO kitchenObject;
 
 
+        public event Action OnOpenClosed; 
+        
+
         public override void Interact(Player player)
         {
-            if (TryTakeKitchenObjectFromPlayer(player)) return;
+            if (TryTakeKitchenObjectFromPlayer(player))
+            {
+                OnOpenClosed?.Invoke();
+                return;
+            }
 
-            TryGiveKitchenObjectToPlayer(player);
+            if (TryGiveKitchenObjectToPlayer(player))
+            {
+                OnOpenClosed?.Invoke();
+            }
         }
 
 
