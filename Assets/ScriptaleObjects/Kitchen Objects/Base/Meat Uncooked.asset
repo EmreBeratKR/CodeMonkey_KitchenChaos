@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cd80c0c0eef442083027bdfc83a2c1f, type: 3}
-  m_Name: Uncooked Meat
+  m_Name: Meat Uncooked
   m_EditorClassIdentifier: 
   <Prefab>k__BackingField: {fileID: 257956370374410306, guid: 261ce318165114e899e55aafad8ea4f8,
     type: 3}
