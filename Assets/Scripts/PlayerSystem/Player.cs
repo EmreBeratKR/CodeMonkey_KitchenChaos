@@ -1,3 +1,4 @@
+using CounterSystem;
 using EmreBeratKR.ServiceLocator;
 using UnityEngine;
 
@@ -8,11 +9,15 @@ namespace PlayerSystem
         [SerializeField] private CharacterController body;
         [SerializeField] private PlayerAnimator animator;
         [SerializeField] private PlayerInteractor interactor;
+        [SerializeField] private KitchenObjectSlot slot;
         [SerializeField] private float moveSpeed = 7f;
         [SerializeField] private float rotationSpeed = 25f;
 
 
-        private ClearCounter m_CurrentCounter;
+        public bool IsFull => slot.IsFull;
+        
+
+        private Counter m_CurrentCounter;
         
 
         private void OnEnable()
@@ -34,9 +39,27 @@ namespace PlayerSystem
         }
 
 
+        public bool TryPutKitchenObject(KitchenObject kitchenObject)
+        {
+            return slot.TryPut(kitchenObject);
+        }
+        
+        public bool TryGetKitchenObject(out KitchenObject kitchenObject)
+        {
+            return slot.TryGet(out kitchenObject);
+        }
+
+        public bool TryRemoveKitchenObject(out KitchenObject kitchenObject)
+        {
+            return slot.TryRemove(out kitchenObject);
+        }
+        
+
         private void OnGameInputInteract()
         {
-            Debug.Log("interact");
+            if (!m_CurrentCounter) return;
+            
+            m_CurrentCounter.Interact(this);
         }
 
 
@@ -49,7 +72,7 @@ namespace PlayerSystem
 
         private void HandleInteraction()
         {
-            if (interactor.TryGetInteraction(out ClearCounter currentCounter))
+            if (interactor.TryGetInteraction(out Counter currentCounter))
             {
                 if (m_CurrentCounter == currentCounter) return;
                 
