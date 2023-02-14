@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d0893841b2447adae4b102e7f63d3b1, type: 3}
-  m_Name: Cutting Recipe Book
+  m_Name: _Cutting Recipe Book
   m_EditorClassIdentifier: 
   recipes:
   - {fileID: 11400000, guid: c75bb8fa69b704697a43c248aec53b48, type: 2}

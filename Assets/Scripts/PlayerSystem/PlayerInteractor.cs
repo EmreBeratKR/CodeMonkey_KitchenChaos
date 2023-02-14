@@ -1,7 +1,5 @@
-using System;
-using UnityEngine;
 using Utils;
-using Object = UnityEngine.Object;
+using UnityEngine;
 
 namespace PlayerSystem
 {
@@ -20,30 +18,61 @@ namespace PlayerSystem
 
         private readonly Collider[] m_ColliderBuffer = new Collider[BufferSize];
         
-        
-        public bool TryGetInteraction<T>(out T interaction)
-            where T : Object
-        {
-            var size = Physics.OverlapBoxNonAlloc(Center, HalfExtends, m_ColliderBuffer, Rotation, layerMask);
 
-            if (size <= 0)
+        public bool TryGetInteraction<T>(out T interaction)
+            where T : Component
+        {
+            var count = TryGetInteractions<T>();
+
+            if (count <= 0)
             {
                 interaction = null;
                 return false;
             }
+            
+            var center = Center;
+            var minSqrDistance = float.MaxValue;
+            interaction = null;
 
-            for (var i = 0; i < size; i++)
+            for (var i = 0; i < count; i++)
             {
-                if (!m_ColliderBuffer[i].TryGetComponent(out interaction)) continue;
+                var element = m_ColliderBuffer[i];
+                var sqrDistance = Vector3.SqrMagnitude(element.transform.position - center);
+                
+                if (!interaction)
+                {
+                    interaction = element.GetComponent<T>();
+                    minSqrDistance = sqrDistance;
+                    continue;
+                }
 
-                return true;
+                if (sqrDistance >= minSqrDistance) continue;
+
+                interaction = element.GetComponent<T>();;
+                minSqrDistance = sqrDistance;
             }
 
-            interaction = null;
-            return false;
+            return interaction;
         }
 
 
+        private int TryGetInteractions<T>()
+            where T : Component
+        {
+            var count = Physics.OverlapBoxNonAlloc(Center, HalfExtends, m_ColliderBuffer, Rotation, layerMask);
+            var interactionCount = 0;
+
+            for (var i = 0; i < count; i++)
+            {
+                if (!m_ColliderBuffer[i].TryGetComponent(out T _)) continue;
+
+                m_ColliderBuffer[interactionCount] = m_ColliderBuffer[i];
+                interactionCount += 1;
+            }
+
+            return interactionCount;
+        }
+        
         private Vector3 GetCenter()
         {
             return transform.position;

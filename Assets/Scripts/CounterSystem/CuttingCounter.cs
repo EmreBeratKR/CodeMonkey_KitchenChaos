@@ -1,4 +1,5 @@
 using System;
+using General;
 using KitchenObjectSystem;
 using PlayerSystem;
 using UnityEngine;
@@ -9,8 +10,8 @@ namespace CounterSystem
     {
         [SerializeField] private CuttingRecipeBookSO recipeBook;
 
-        
-        public Action<float> OnProgressChanged { get; set; }
+
+        public event Action<ProgressChangedArgs> OnProgressChanged;
         public event Action OnCut;
         
 
@@ -44,11 +45,17 @@ namespace CounterSystem
             {
                 m_CurrentRecipe = recipe;
                 m_CurrentCut = 0;
-                OnProgressChanged?.Invoke(0f);
+                OnProgressChanged?.Invoke(new ProgressChangedArgs
+                {
+                    progressNormalized = 0f
+                });
             }
 
             m_CurrentCut += 1;
-            OnProgressChanged?.Invoke(Mathf.InverseLerp(0f, recipe.CutCount, m_CurrentCut));
+            OnProgressChanged?.Invoke(new ProgressChangedArgs
+            {
+                progressNormalized = Mathf.InverseLerp(0f, recipe.CutCount, m_CurrentCut)
+            });
 
             if (m_CurrentCut >= m_CurrentRecipe.CutCount)
             {
@@ -58,7 +65,10 @@ namespace CounterSystem
                 TryPutKitchenObject(output);
                 m_CurrentRecipe = null;
                 m_CurrentCut = 0;
-                OnProgressChanged?.Invoke(0f);
+                OnProgressChanged?.Invoke(new ProgressChangedArgs
+                {
+                    progressNormalized = 0f
+                });
             }
 
             return true;
