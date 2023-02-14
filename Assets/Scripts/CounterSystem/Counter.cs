@@ -33,6 +33,11 @@ namespace CounterSystem
             selectedVisual.SetActive(false);
         }
 
+
+        protected void ClearKitchenObject()
+        {
+            slot.Clear();
+        }
         
         protected bool TryPutKitchenObject(KitchenObject kitchenObject)
         {

@@ -8,8 +8,13 @@ namespace KitchenObjectSystem
 
 
         public bool IsFull => GetIsFull();
-        
 
+
+        public void Clear()
+        {
+            m_KitchenObject = null;
+        }
+        
         public bool TryPut(KitchenObject kitchenObject)
         {
             if (IsFull) return false;

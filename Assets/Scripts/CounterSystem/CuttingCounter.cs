@@ -49,9 +49,9 @@ namespace CounterSystem
 
             if (m_CurrentCut >= m_CurrentRecipe.CutCount)
             {
-                TryRemoveKitchenObject(out _);
+                ClearKitchenObject();
                 kitchenObject.DestroySelf();
-                var output = SpawnRecipeOutput(recipe.Output.Prefab);
+                var output = SpawnRecipeOutput(recipe.Output);
                 TryPutKitchenObject(output);
                 m_CurrentRecipe = null;
                 m_CurrentCut = 0;
@@ -60,9 +60,9 @@ namespace CounterSystem
             return true;
         }
 
-        private KitchenObject SpawnRecipeOutput(KitchenObject prefab)
+        private static KitchenObject SpawnRecipeOutput(KitchenObjectSO kitchenObject)
         {
-            return Instantiate(prefab);
+            return KitchenObject.Spawn(kitchenObject);
         }
     }
 }

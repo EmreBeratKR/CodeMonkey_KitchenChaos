@@ -42,6 +42,11 @@ namespace PlayerSystem
         }
 
 
+        public void ClearKitchenObject()
+        {
+            slot.Clear();
+        }
+        
         public bool TryPutKitchenObject(KitchenObject kitchenObject)
         {
             return slot.TryPut(kitchenObject);

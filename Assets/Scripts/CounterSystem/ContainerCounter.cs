@@ -57,7 +57,7 @@ namespace CounterSystem
         
         private KitchenObject SpawnKitchenObject()
         {
-            return Instantiate(kitchenObject.Prefab);
+            return KitchenObject.Spawn(kitchenObject);
         }
     }
 }
