@@ -1,8 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu]
-public class KitchenObjectSO : ScriptableObject
+namespace KitchenObjectSystem
 {
-    [field: SerializeField] public KitchenObject Prefab { get; private set; }
-    [field: SerializeField] public Sprite Icon { get; private set; }
+    [CreateAssetMenu]
+    public class KitchenObjectSO : ScriptableObject
+    {
+        [field: SerializeField] public KitchenObject Prefab { get; private set; }
+        [field: SerializeField] public Sprite Icon { get; private set; }
+    }
 }

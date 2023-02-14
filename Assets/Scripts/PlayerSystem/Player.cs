@@ -1,5 +1,6 @@
 using CounterSystem;
 using EmreBeratKR.ServiceLocator;
+using KitchenObjectSystem;
 using UnityEngine;
 
 namespace PlayerSystem

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CounterSystem
+namespace KitchenObjectSystem
 {
     public class KitchenObjectSlot : MonoBehaviour
     {
