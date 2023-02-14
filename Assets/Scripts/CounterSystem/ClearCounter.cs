@@ -6,7 +6,7 @@ namespace CounterSystem
     {
         public override void Interact(Player player)
         {
-            TakeOrGiveInteraction(player);
+            TakeOrGiveKitchenObjectWithPlayer(player);
         }
     }
 }

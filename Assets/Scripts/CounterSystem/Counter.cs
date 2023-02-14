@@ -10,7 +10,7 @@ namespace CounterSystem
         [SerializeField] private KitchenObjectSlot slot;
 
 
-        public bool IsFull => GetIsFull();
+        protected bool IsFull => GetIsFull();
         
 
         public virtual void Interact(Player player)
@@ -33,12 +33,28 @@ namespace CounterSystem
             selectedVisual.SetActive(false);
         }
 
-
+        protected void TakeOrGiveKitchenObjectWithPlayer(Player player)
+        {
+            if (TryGetKitchenObject(out var kitchenObject))
+            {
+                if (!player.TryPutKitchenObject(kitchenObject)) return;
+                
+                ClearKitchenObject();
+                return;
+            }
+            
+            if (!player.TryGetKitchenObject(out kitchenObject)) return;
+            
+            if (!TryPutKitchenObject(kitchenObject)) return;
+            
+            player.ClearKitchenObject();
+        }
+        
         protected void ClearKitchenObject()
         {
             slot.Clear();
         }
-        
+
         protected bool TryPutKitchenObject(KitchenObject kitchenObject)
         {
             return slot.TryPut(kitchenObject);
@@ -54,32 +70,25 @@ namespace CounterSystem
             return slot.TryRemove(out kitchenObject);
         }
 
-        protected void TakeOrGiveInteraction(Player player)
+        protected void DestroyKitchenObject()
         {
-            if (TryTakeKitchenObjectFromPlayer(player)) return;
-
-            TryGiveKitchenObjectToPlayer(player);
-        }
-
-
-        private bool TryTakeKitchenObjectFromPlayer(Player player)
-        {
-            if (IsFull) return false;
+            if (!TryGetKitchenObject(out var kitchenObject)) return;
             
-            if (!player.TryRemoveKitchenObject(out var kitchenObject)) return false;
-            
-            return TryPutKitchenObject(kitchenObject);
+            kitchenObject.DestroySelf();
+            ClearKitchenObject();
         }
 
-        private bool TryGiveKitchenObjectToPlayer(Player player)
+        protected KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObject)
         {
-            if (player.IsFull) return false;
+            if (IsFull) return null;
 
-            if (!TryRemoveKitchenObject(out var kitchenObject)) return false;
+            var kitchenObj = KitchenObject.Spawn(kitchenObject);
+            TryPutKitchenObject(kitchenObj);
 
-            return player.TryPutKitchenObject(kitchenObject);
+            return kitchenObj;
         }
-        
+
+
         private bool GetIsFull()
         {
             return slot.IsFull;

@@ -21,7 +21,7 @@ namespace CounterSystem
         
         public override void Interact(Player player)
         {
-            TakeOrGiveInteraction(player);
+            TakeOrGiveKitchenObjectWithPlayer(player);
         }
 
         public override void InteractAlternate(Player player)
@@ -59,10 +59,8 @@ namespace CounterSystem
 
             if (m_CurrentCut >= m_CurrentRecipe.CutCount)
             {
-                ClearKitchenObject();
-                kitchenObject.DestroySelf();
-                var output = SpawnRecipeOutput(recipe.Output);
-                TryPutKitchenObject(output);
+                DestroyKitchenObject();
+                SpawnKitchenObject(recipe.Output);
                 m_CurrentRecipe = null;
                 m_CurrentCut = 0;
                 OnProgressChanged?.Invoke(new ProgressChangedArgs
@@ -72,11 +70,6 @@ namespace CounterSystem
             }
 
             return true;
-        }
-
-        private static KitchenObject SpawnRecipeOutput(KitchenObjectSO kitchenObject)
-        {
-            return KitchenObject.Spawn(kitchenObject);
         }
     }
 }
