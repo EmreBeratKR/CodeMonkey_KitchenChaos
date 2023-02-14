@@ -22,8 +22,13 @@ namespace KitchenObjectSystem
         {
             Destroy(gameObject);
         }
-    
-    
+
+
+        public static implicit operator KitchenObjectSO(KitchenObject kitchenObject)
+        {
+            return kitchenObject.kitchenObject;
+        }
+        
         public static bool operator ==(KitchenObject lhs, KitchenObjectSO rhs)
         {
             return lhs.kitchenObject == rhs;

@@ -17,6 +17,11 @@ namespace CounterSystem
         {
             
         }
+
+        public virtual void InteractAlternate(Player player)
+        {
+            
+        }
         
         public void Select()
         {
@@ -44,7 +49,32 @@ namespace CounterSystem
             return slot.TryRemove(out kitchenObject);
         }
 
+        protected void TakeOrGiveInteraction(Player player)
+        {
+            if (TryTakeKitchenObjectFromPlayer(player)) return;
 
+            TryGiveKitchenObjectToPlayer(player);
+        }
+
+
+        private bool TryTakeKitchenObjectFromPlayer(Player player)
+        {
+            if (IsFull) return false;
+            
+            if (!player.TryRemoveKitchenObject(out var kitchenObject)) return false;
+            
+            return TryPutKitchenObject(kitchenObject);
+        }
+
+        private bool TryGiveKitchenObjectToPlayer(Player player)
+        {
+            if (player.IsFull) return false;
+
+            if (!TryRemoveKitchenObject(out var kitchenObject)) return false;
+
+            return player.TryPutKitchenObject(kitchenObject);
+        }
+        
         private bool GetIsFull()
         {
             return slot.IsFull;

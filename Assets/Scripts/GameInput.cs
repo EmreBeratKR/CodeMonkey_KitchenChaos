@@ -9,6 +9,7 @@ public class GameInput : ServiceBehaviour
 
 
     public event Action OnInteract;
+    public event Action OnInteractAlternate;
     
 
     private void Awake()
@@ -20,6 +21,9 @@ public class GameInput : ServiceBehaviour
         
         m_PlayerActions.Interact.Enable();
         m_PlayerActions.Interact.performed += OnInteractPerformed;
+        
+        m_PlayerActions.InteractAlternate.Enable();
+        m_PlayerActions.InteractAlternate.performed += OnInteractAlternatePerformed;
     }
 
     private void OnDestroy()
@@ -28,12 +32,20 @@ public class GameInput : ServiceBehaviour
 
         m_PlayerActions.Interact.performed -= OnInteractPerformed;
         m_PlayerActions.Interact.Disable();
+
+        m_PlayerActions.InteractAlternate.performed -= OnInteractAlternatePerformed;
+        m_PlayerActions.InteractAlternate.Disable();
     }
 
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
         OnInteract?.Invoke();
+    }
+    
+    private void OnInteractAlternatePerformed(InputAction.CallbackContext obj)
+    {
+        OnInteractAlternate?.Invoke();
     }
     
 

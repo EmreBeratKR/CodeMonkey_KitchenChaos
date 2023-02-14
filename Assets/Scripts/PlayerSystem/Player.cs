@@ -24,11 +24,13 @@ namespace PlayerSystem
         private void OnEnable()
         {
             ServiceLocator.Get<GameInput>().OnInteract += OnGameInputInteract;
+            ServiceLocator.Get<GameInput>().OnInteractAlternate += OnGameInputInteractAlternate;
         }
 
         private void OnDisable()
         {
             ServiceLocator.Get<GameInput>().OnInteract -= OnGameInputInteract;
+            ServiceLocator.Get<GameInput>().OnInteractAlternate -= OnGameInputInteractAlternate;
         }
 
         private void Update()
@@ -61,6 +63,13 @@ namespace PlayerSystem
             if (!m_CurrentCounter) return;
             
             m_CurrentCounter.Interact(this);
+        }
+
+        private void OnGameInputInteractAlternate()
+        {
+            if (!m_CurrentCounter) return;
+            
+            m_CurrentCounter.InteractAlternate(this);
         }
 
 
