@@ -7,11 +7,20 @@ namespace CounterSystem
     public abstract class Counter : MonoBehaviour
     {
         [SerializeField] private GameObject selectedVisual;
-        [SerializeField] private KitchenObjectSlot slot;
 
 
         protected bool IsFull => GetIsFull();
+        protected bool IsEmpty => GetIsEmpty();
         
+        
+        private KitchenObjectSlot[] m_Slots;
+
+
+        protected virtual void Awake()
+        {
+            m_Slots = GetComponentsInChildren<KitchenObjectSlot>();
+        }
+
 
         public virtual void Interact(Player player)
         {
@@ -37,10 +46,11 @@ namespace CounterSystem
         {
             if (TryGetKitchenObject(out var kitchenObject))
             {
-                if (!player.TryPutKitchenObject(kitchenObject)) return;
-                
-                ClearKitchenObject();
-                return;
+                if (player.TryPutKitchenObject(kitchenObject))
+                {
+                    ClearKitchenObject(kitchenObject);
+                    return;
+                }
             }
             
             if (!player.TryGetKitchenObject(out kitchenObject)) return;
@@ -50,24 +60,48 @@ namespace CounterSystem
             player.ClearKitchenObject();
         }
         
-        protected void ClearKitchenObject()
+        protected void ClearKitchenObject(KitchenObject kitchenObject)
         {
-            slot.Clear();
+            foreach (var slot in m_Slots)
+            {
+                if (!slot.TryGet(out var kitchenObj)) continue;
+                
+                if (kitchenObj != kitchenObject) continue;
+                
+                slot.Clear();
+            }
         }
 
         protected bool TryPutKitchenObject(KitchenObject kitchenObject)
         {
-            return slot.TryPut(kitchenObject);
+            foreach (var slot in m_Slots)
+            {
+                if (slot.TryPut(kitchenObject)) return true;
+            }
+
+            return false;
         }
 
         protected bool TryGetKitchenObject(out KitchenObject kitchenObject)
         {
-            return slot.TryGet(out kitchenObject);
+            for (var i = m_Slots.Length - 1; i >= 0; i--)
+            {
+                if (m_Slots[i].TryGet(out kitchenObject)) return true;
+            }
+
+            kitchenObject = null;
+            return false;
         }
 
         protected bool TryRemoveKitchenObject(out KitchenObject kitchenObject)
         {
-            return slot.TryRemove(out kitchenObject);
+            for (var i = m_Slots.Length - 1; i >= 0; i--)
+            {
+                if (m_Slots[i].TryRemove(out kitchenObject)) return true;
+            }
+
+            kitchenObject = null;
+            return false;
         }
 
         protected void DestroyKitchenObject()
@@ -75,10 +109,10 @@ namespace CounterSystem
             if (!TryGetKitchenObject(out var kitchenObject)) return;
             
             kitchenObject.DestroySelf();
-            ClearKitchenObject();
+            ClearKitchenObject(kitchenObject);
         }
 
-        protected KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObject)
+        protected KitchenObject SpawnAndPutKitchenObject(KitchenObjectSO kitchenObject)
         {
             if (IsFull) return null;
 
@@ -91,7 +125,22 @@ namespace CounterSystem
 
         private bool GetIsFull()
         {
-            return slot.IsFull;
+            foreach (var slot in m_Slots)
+            {
+                if (!slot.IsFull) return false;
+            }
+
+            return true;
+        }
+
+        private bool GetIsEmpty()
+        {
+            foreach (var slot in m_Slots)
+            {
+                if (!slot.IsEmpty) return false;
+            }
+
+            return true;
         }
     }
 }

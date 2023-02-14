@@ -22,6 +22,12 @@ namespace CounterSystem
         public override void Interact(Player player)
         {
             TakeOrGiveKitchenObjectWithPlayer(player);
+
+            if (IsEmpty)
+            {
+                m_CurrentRecipe = null;
+                ResetProgress();
+            }
         }
 
         public override void InteractAlternate(Player player)
@@ -44,11 +50,7 @@ namespace CounterSystem
             if (!m_CurrentRecipe)
             {
                 m_CurrentRecipe = recipe;
-                m_CurrentCut = 0;
-                OnProgressChanged?.Invoke(new ProgressChangedArgs
-                {
-                    progressNormalized = 0f
-                });
+                ResetProgress();
             }
 
             m_CurrentCut += 1;
@@ -60,16 +62,21 @@ namespace CounterSystem
             if (m_CurrentCut >= m_CurrentRecipe.CutCount)
             {
                 DestroyKitchenObject();
-                SpawnKitchenObject(recipe.Output);
+                SpawnAndPutKitchenObject(recipe.Output);
                 m_CurrentRecipe = null;
-                m_CurrentCut = 0;
-                OnProgressChanged?.Invoke(new ProgressChangedArgs
-                {
-                    progressNormalized = 0f
-                });
+                ResetProgress();
             }
 
             return true;
+        }
+
+        private void ResetProgress()
+        {
+            m_CurrentCut = 0;
+            OnProgressChanged?.Invoke(new ProgressChangedArgs
+            {
+                progressNormalized = 0f
+            });
         }
     }
 }

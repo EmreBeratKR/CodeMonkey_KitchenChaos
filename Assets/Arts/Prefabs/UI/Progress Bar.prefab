@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressProvider: {fileID: 0}
   fill: {fileID: 7830480144022803696}
+  hideWhenEmpty: 0
 --- !u!114 &7830480143910397998
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -93,7 +93,7 @@ namespace CounterSystem
         private void CompleteRecipe(StoveRecipeSO recipe)
         {
             DestroyKitchenObject();
-            SpawnKitchenObject(recipe.Output);
+            SpawnAndPutKitchenObject(recipe.Output);
             m_State = State.Idle;
             OnStopCooking?.Invoke();
         }

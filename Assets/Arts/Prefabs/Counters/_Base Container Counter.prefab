@@ -227,7 +227,7 @@ PrefabInstance:
     - target: {fileID: 7280271999026011188, guid: 1e04a315037aa4d64a0b4af23697188c,
         type: 3}
       propertyPath: m_Name
-      value: Base Container Counter
+      value: _Base Container Counter
       objectReference: {fileID: 0}
     - target: {fileID: 7280271999026011191, guid: 1e04a315037aa4d64a0b4af23697188c,
         type: 3}
@@ -331,17 +331,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedVisual: {fileID: 3938185010832445197}
-  slot: {fileID: 8066170210017547665}
+  slots: []
   kitchenObject: {fileID: 0}
---- !u!114 &8066170210017547665 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7414620918631461608, guid: 1e04a315037aa4d64a0b4af23697188c,
-    type: 3}
-  m_PrefabInstance: {fileID: 654936613379008377}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9401e6a417a14e6498ae7825ddb3dfba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

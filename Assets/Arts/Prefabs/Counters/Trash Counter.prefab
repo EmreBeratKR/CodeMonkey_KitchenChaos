@@ -203,19 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedVisual: {fileID: 4650535147571428678}
-  slot: {fileID: 6843342671606787699}
---- !u!114 &6843342671606787699 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7414620918631461608, guid: 1e04a315037aa4d64a0b4af23697188c,
-    type: 3}
-  m_PrefabInstance: {fileID: 4043785608765660315}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9401e6a417a14e6498ae7825ddb3dfba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  ignoredKitchenObjects:
+  - {fileID: 11400000, guid: d79d765b39d134226b448def0fdf5543, type: 2}
 --- !u!1001 &9168192033999542764
 PrefabInstance:
   m_ObjectHideFlags: 0

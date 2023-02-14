@@ -16,6 +16,7 @@ namespace PlayerSystem
 
 
         public bool IsFull => slot.IsFull;
+        public bool IsEmpty => slot.IsEmpty;
         
 
         private Counter m_CurrentCounter;
@@ -60,6 +61,11 @@ namespace PlayerSystem
         public bool TryRemoveKitchenObject(out KitchenObject kitchenObject)
         {
             return slot.TryRemove(out kitchenObject);
+        }
+
+        public bool ContainsKitchenObject(KitchenObjectSO kitchenObject)
+        {
+            return slot.Contains(kitchenObject);
         }
         
 

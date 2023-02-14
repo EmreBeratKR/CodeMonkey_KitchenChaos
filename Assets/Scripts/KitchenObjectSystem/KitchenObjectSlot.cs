@@ -8,6 +8,7 @@ namespace KitchenObjectSystem
 
 
         public bool IsFull => GetIsFull();
+        public bool IsEmpty => GetIsEmpty();
 
 
         public void Clear()
@@ -18,6 +19,8 @@ namespace KitchenObjectSystem
         public bool TryPut(KitchenObject kitchenObject)
         {
             if (IsFull) return false;
+
+            if (!kitchenObject) return false;
 
             m_KitchenObject = kitchenObject;
             kitchenObject.SetSlot(this);
@@ -41,10 +44,22 @@ namespace KitchenObjectSystem
             return true;
         }
 
+        public bool Contains(KitchenObjectSO kitchenObject)
+        {
+            if (!TryGet(out var kitchenObj)) return false;
+
+            return kitchenObj == kitchenObject;
+        }
+
 
         private bool GetIsFull()
         {
             return m_KitchenObject;
+        }
+
+        private bool GetIsEmpty()
+        {
+            return !m_KitchenObject;
         }
     }
 }

@@ -34,7 +34,17 @@ namespace KitchenObjectSystem
         {
             return kitchenObject.m_Data;
         }
-        
+
+        public static bool operator ==(KitchenObject lhs, KitchenObject rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator !=(KitchenObject lhs, KitchenObject rhs)
+        {
+            return !(lhs == rhs);
+        }
+
         public static bool operator ==(KitchenObject lhs, KitchenObjectSO rhs)
         {
             return lhs.m_Data == rhs;

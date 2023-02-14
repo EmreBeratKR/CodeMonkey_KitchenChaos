@@ -1,5 +1,86 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3843835174284625987
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2548578630310207082}
+    m_Modifications:
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3781315104910795086, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6913897027761350891, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+        type: 3}
+      propertyPath: m_Name
+      value: Slot
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d285d5072fbcc47bb88b6fb02bb60f45, type: 3}
+--- !u!114 &3811375337185014264 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 125170694215170491, guid: d285d5072fbcc47bb88b6fb02bb60f45,
+    type: 3}
+  m_PrefabInstance: {fileID: 3843835174284625987}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9401e6a417a14e6498ae7825ddb3dfba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4783022826088983104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -184,18 +265,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e04a315037aa4d64a0b4af23697188c, type: 3}
---- !u!114 &2631988512977405692 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7414620918631461608, guid: 1e04a315037aa4d64a0b4af23697188c,
+--- !u!4 &2548578630310207082 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7007296634146171518, guid: 1e04a315037aa4d64a0b4af23697188c,
     type: 3}
   m_PrefabInstance: {fileID: 4783022827334284308}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9401e6a417a14e6498ae7825ddb3dfba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2839534017587652640 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7280271999026011188, guid: 1e04a315037aa4d64a0b4af23697188c,
@@ -215,7 +290,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedVisual: {fileID: 9066105508073770730}
-  slot: {fileID: 2631988512977405692}
+  slots:
+  - {fileID: 3811375337185014264}
 --- !u!4 &4783022825954811099 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1380395215, guid: 1e04a315037aa4d64a0b4af23697188c,

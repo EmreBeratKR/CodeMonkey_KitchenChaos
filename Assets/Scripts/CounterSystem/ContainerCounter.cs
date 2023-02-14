@@ -25,9 +25,9 @@ namespace CounterSystem
                 return;
             }
             
-            kitchenObj = SpawnKitchenObject(kitchenObject);
+            kitchenObj = KitchenObject.Spawn(kitchenObject);
             player.TryPutKitchenObject(kitchenObj);
-            ClearKitchenObject();
+            ClearKitchenObject(kitchenObj);
             OnOpenClosed?.Invoke();
         }
     }
