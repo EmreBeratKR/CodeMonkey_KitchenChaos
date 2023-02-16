@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55bf105a3fcb41a3a15d1a5dfec22fbb, type: 3}
+  m_Name: _Plate Recipe Book
+  m_EditorClassIdentifier: 
+  recipes:
+  - {fileID: 8098625040410173486, guid: 8508317ba5dd847d09d7b2635372eb73, type: 3}
+  - {fileID: 4480271755974160634, guid: 1d0c138afa6e14767946ebee499b7542, type: 3}
+  - {fileID: 5248425351672398078, guid: 5fd8bc67c09bd4b928f5d73dc65c432a, type: 3}
+  - {fileID: 5838674256848277665, guid: 5e85e6e776bad47c0afeeb64e7d8ec42, type: 3}
+  - {fileID: 4217316300689238487, guid: 4ed475d02341d4d5e89e68caf5122903, type: 3}
+  - {fileID: 3662055132016948753, guid: e3ee560d3479740b3ae2ff10f2a96d10, type: 3}
+  - {fileID: 6290182572548949788, guid: efc1819bbc4e246f2b2bab25afb92216, type: 3}
+  - {fileID: 6667075186839295387, guid: 80193b2f5bbef47ee8e6fb5cbc8c1743, type: 3}

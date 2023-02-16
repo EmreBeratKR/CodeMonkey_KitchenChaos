@@ -15,9 +15,9 @@ namespace CounterSystem
 
         public override void Interact(Player player)
         {
-            if (player.TryGetKitchenObject(out var kitchenObj))
+            if (player.TryGetKitchenObject(out KitchenObject kitchenObj))
             {
-                if (kitchenObj != kitchenObject) return;
+                if (kitchenObj.Data != kitchenObject) return;
                 
                 kitchenObj.DestroySelf();
                 player.ClearKitchenObject();

@@ -21,6 +21,8 @@ namespace CounterSystem
         
         public override void Interact(Player player)
         {
+            if (TryCombineWithPlate(player)) return;
+
             TakeOrGiveKitchenObjectWithPlayer(player);
 
             if (IsEmpty)
@@ -41,9 +43,9 @@ namespace CounterSystem
 
         private bool TryPerformCut()
         {
-            if (!TryGetKitchenObject(out var kitchenObject)) return false;
+            if (!TryGetKitchenObject(out KitchenObject kitchenObject)) return false;
 
-            var recipe = recipeBook.GetRecipe(kitchenObject);
+            var recipe = recipeBook.GetRecipe(kitchenObject.Data);
             
             if (!recipe) return false;
 

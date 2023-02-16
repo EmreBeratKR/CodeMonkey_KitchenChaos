@@ -1,3 +1,4 @@
+using KitchenObjectSystem;
 using PlayerSystem;
 
 namespace CounterSystem
@@ -6,6 +7,8 @@ namespace CounterSystem
     {
         public override void Interact(Player player)
         {
+            if (TryCombineWithPlate(player)) return;
+            
             TakeOrGiveKitchenObjectWithPlayer(player);
         }
     }

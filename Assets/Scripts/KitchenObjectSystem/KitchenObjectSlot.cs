@@ -28,15 +28,17 @@ namespace KitchenObjectSystem
             return true;
         }
 
-        public bool TryGet(out KitchenObject kitchenObject)
+        public bool TryGet<T>(out T kitchenObject)
+            where T : KitchenObject
         {
-            kitchenObject = m_KitchenObject;
+            kitchenObject = m_KitchenObject as T;
             return kitchenObject;
         }
 
-        public bool TryRemove(out KitchenObject kitchenObject)
+        public bool TryRemove<T>(out T kitchenObject)
+            where T : KitchenObject
         {
-            kitchenObject = m_KitchenObject;
+            kitchenObject = (T) m_KitchenObject;
 
             if (!kitchenObject) return false;
             
@@ -46,9 +48,9 @@ namespace KitchenObjectSystem
 
         public bool Contains(KitchenObjectSO kitchenObject)
         {
-            if (!TryGet(out var kitchenObj)) return false;
+            if (!TryGet(out KitchenObject kitchenObj)) return false;
 
-            return kitchenObj == kitchenObject;
+            return kitchenObj.Data == kitchenObject;
         }
 
 

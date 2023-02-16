@@ -53,12 +53,14 @@ namespace PlayerSystem
             return slot.TryPut(kitchenObject);
         }
         
-        public bool TryGetKitchenObject(out KitchenObject kitchenObject)
+        public bool TryGetKitchenObject<T>(out T kitchenObject)
+            where T : KitchenObject
         {
             return slot.TryGet(out kitchenObject);
         }
 
-        public bool TryRemoveKitchenObject(out KitchenObject kitchenObject)
+        public bool TryRemoveKitchenObject<T>(out T kitchenObject)
+            where T : KitchenObject
         {
             return slot.TryRemove(out kitchenObject);
         }

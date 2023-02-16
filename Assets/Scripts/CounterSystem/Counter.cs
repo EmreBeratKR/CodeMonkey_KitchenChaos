@@ -44,7 +44,7 @@ namespace CounterSystem
 
         protected void TakeOrGiveKitchenObjectWithPlayer(Player player)
         {
-            if (TryGetKitchenObject(out var kitchenObject))
+            if (TryGetKitchenObject(out KitchenObject kitchenObject))
             {
                 if (player.TryPutKitchenObject(kitchenObject))
                 {
@@ -60,11 +60,35 @@ namespace CounterSystem
             player.ClearKitchenObject();
         }
         
+        protected bool TryCombineWithPlate(Player player)
+        {
+            if (player.TryGetKitchenObject(out PlateKitchenObject plate))
+            {
+                if (!TryGetKitchenObject(out KitchenObject kitchenObject)) return false;
+
+                if (!plate.TryCombineWithKitchenObject(kitchenObject)) return false;
+                
+                ClearKitchenObject(kitchenObject);
+                
+                return true;
+            }
+
+            if (!TryGetKitchenObject(out plate)) return false;
+
+            if (!player.TryGetKitchenObject(out KitchenObject kitchenObj)) return false;
+
+            if (!plate.TryCombineWithKitchenObject(kitchenObj)) return false;
+            
+            player.ClearKitchenObject();
+            
+            return true;
+        }
+        
         protected void ClearKitchenObject(KitchenObject kitchenObject)
         {
             foreach (var slot in m_Slots)
             {
-                if (!slot.TryGet(out var kitchenObj)) continue;
+                if (!slot.TryGet(out KitchenObject kitchenObj)) continue;
                 
                 if (kitchenObj != kitchenObject) continue;
                 
@@ -82,7 +106,8 @@ namespace CounterSystem
             return false;
         }
 
-        protected bool TryGetKitchenObject(out KitchenObject kitchenObject)
+        protected bool TryGetKitchenObject<T>(out T kitchenObject)
+            where T : KitchenObject
         {
             for (var i = m_Slots.Length - 1; i >= 0; i--)
             {
@@ -93,7 +118,8 @@ namespace CounterSystem
             return false;
         }
 
-        protected bool TryRemoveKitchenObject(out KitchenObject kitchenObject)
+        protected bool TryRemoveKitchenObject<T>(out T kitchenObject)
+            where T : KitchenObject
         {
             for (var i = m_Slots.Length - 1; i >= 0; i--)
             {
@@ -106,7 +132,7 @@ namespace CounterSystem
 
         protected void DestroyKitchenObject()
         {
-            if (!TryGetKitchenObject(out var kitchenObject)) return;
+            if (!TryGetKitchenObject(out KitchenObject kitchenObject)) return;
             
             kitchenObject.DestroySelf();
             ClearKitchenObject(kitchenObject);

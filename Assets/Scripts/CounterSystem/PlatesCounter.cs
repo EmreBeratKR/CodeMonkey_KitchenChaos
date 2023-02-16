@@ -20,7 +20,11 @@ namespace CounterSystem
 
         public override void Interact(Player player)
         {
-            if (player.IsFull && !player.ContainsKitchenObject(kitchenObject)) return;
+            if (TryCombineWithPlate(player)) return;
+
+            if (!player.TryGetKitchenObject(out PlateKitchenObject plate) && !player.IsEmpty) return;
+            
+            if (plate && !plate.IsEmpty) return;
             
             TakeOrGiveKitchenObjectWithPlayer(player);
         }

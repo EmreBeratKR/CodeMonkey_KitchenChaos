@@ -15,9 +15,15 @@ namespace CounterSystem
         
         public override void Interact(Player player)
         {
+            if (TryDestroyKitchenObjectsFromPlayerPlate(player))
+            {
+                OnFilled?.Invoke();
+                return;
+            }
+            
             if (IsPlayerContainsIgnoredKitchenObject(player)) return;
             
-            if (!player.TryRemoveKitchenObject(out var kitchenObject)) return;
+            if (!player.TryRemoveKitchenObject(out KitchenObject kitchenObject)) return;
             
             kitchenObject.DestroySelf();
             
@@ -27,14 +33,25 @@ namespace CounterSystem
 
         private bool IsPlayerContainsIgnoredKitchenObject(Player player)
         {
-            if (!player.TryGetKitchenObject(out var kitchenObject)) return false;
+            if (!player.TryGetKitchenObject(out KitchenObject kitchenObject)) return false;
 
             foreach (var ignoredKitchenObject in ignoredKitchenObjects)
             {
-                if (kitchenObject == ignoredKitchenObject) return true;
+                if (kitchenObject.Data == ignoredKitchenObject) return true;
             }
 
             return false;
+        }
+
+        private bool TryDestroyKitchenObjectsFromPlayerPlate(Player player)
+        {
+            if (!player.TryGetKitchenObject(out PlateKitchenObject plate)) return false;
+
+            if (plate.IsEmpty) return false;
+            
+            plate.DestroyAllKitchenObjects();
+
+            return true;
         }
     }
 }
