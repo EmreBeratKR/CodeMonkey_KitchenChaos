@@ -11,6 +11,13 @@ namespace KitchenObjectSystem
         [SerializeField] private KitchenObject[] ingredients;
 
 
+        public KitchenObjectSO[] GetIngredients()
+        {
+            return ingredients
+                .Select(ingredient => ingredient.Data)
+                .ToArray();
+        }
+        
         public bool Contains(KitchenObjectSO kitchenObject)
         {
             foreach (var input in ingredients)
@@ -19,6 +26,16 @@ namespace KitchenObjectSystem
             }
 
             return false;
+        }
+
+        public bool Matches(KitchenObjectSO[] ingredientList)
+        {
+            foreach (var ingredient in ingredients)
+            {
+                if (!ingredientList.Contains(ingredient.Data)) return false;
+            }
+
+            return true;
         }
 
         public Vector3 GetLocalPosition(KitchenObjectSO kitchenObject)

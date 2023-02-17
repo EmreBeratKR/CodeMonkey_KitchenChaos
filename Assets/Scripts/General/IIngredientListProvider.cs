@@ -10,6 +10,7 @@ namespace General
 
     public struct IngredientListChangedArgs
     {
+        public string name;
         public KitchenObjectSO[] ingredients;
     }
 }

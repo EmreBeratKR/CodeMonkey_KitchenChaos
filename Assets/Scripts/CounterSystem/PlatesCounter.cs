@@ -26,7 +26,7 @@ namespace CounterSystem
             
             if (plate && !plate.IsEmpty) return;
             
-            TakeOrGiveKitchenObjectWithPlayer(player);
+            TakeOrGiveKitchenObjectWithPlayer<KitchenObject>(player);
         }
     }
 }

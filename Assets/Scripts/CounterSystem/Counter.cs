@@ -42,9 +42,10 @@ namespace CounterSystem
             selectedVisual.SetActive(false);
         }
 
-        protected void TakeOrGiveKitchenObjectWithPlayer(Player player)
+        protected void TakeOrGiveKitchenObjectWithPlayer<T>(Player player)
+            where T : KitchenObject
         {
-            if (TryGetKitchenObject(out KitchenObject kitchenObject))
+            if (TryGetKitchenObject(out T kitchenObject))
             {
                 if (player.TryPutKitchenObject(kitchenObject))
                 {
@@ -58,6 +59,17 @@ namespace CounterSystem
             if (!TryPutKitchenObject(kitchenObject)) return;
             
             player.ClearKitchenObject();
+        }
+
+        protected bool TryGiveKitchenObjectToPlayer(Player player)
+        {
+            if (!TryGetKitchenObject(out KitchenObject kitchenObject)) return false;
+
+            if (!player.TryPutKitchenObject(kitchenObject)) return false;
+            
+            ClearKitchenObject(kitchenObject);
+
+            return true;
         }
         
         protected bool TryCombineWithPlate(Player player)

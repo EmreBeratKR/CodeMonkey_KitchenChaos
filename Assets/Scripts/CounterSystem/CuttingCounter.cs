@@ -23,7 +23,7 @@ namespace CounterSystem
         {
             if (TryCombineWithPlate(player)) return;
 
-            TakeOrGiveKitchenObjectWithPlayer(player);
+            TakeOrGiveKitchenObjectWithPlayer<KitchenObject>(player);
 
             if (IsEmpty)
             {

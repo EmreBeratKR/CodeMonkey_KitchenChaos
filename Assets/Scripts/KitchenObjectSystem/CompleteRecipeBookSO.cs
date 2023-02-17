@@ -9,8 +9,14 @@ namespace KitchenObjectSystem
     public class CompleteRecipeBookSO : ScriptableObject, IEnumerable<CompleteRecipe>
     {
         [SerializeField] private CompleteRecipe[] recipes;
-        
 
+
+
+        public CompleteRecipe GetRandomRecipe()
+        {
+            return recipes[Random.Range(0, recipes.Length)];
+        }
+        
         public IEnumerator<CompleteRecipe> GetEnumerator()
         {
             return recipes.Cast<CompleteRecipe>().GetEnumerator();

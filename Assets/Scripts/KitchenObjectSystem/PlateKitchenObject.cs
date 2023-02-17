@@ -59,6 +59,11 @@ namespace KitchenObjectSystem
             RaiseIngredientListChanged();
         }
 
+        public KitchenObjectSO[] GetIngredients()
+        {
+            return m_IngredientsBuffer;
+        }
+
 
         private void RaiseIngredientListChanged()
         {
