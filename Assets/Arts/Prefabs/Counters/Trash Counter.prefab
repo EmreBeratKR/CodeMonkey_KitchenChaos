@@ -205,6 +205,22 @@ MonoBehaviour:
   selectedVisual: {fileID: 4650535147571428678}
   ignoredKitchenObjects:
   - {fileID: 11400000, guid: d79d765b39d134226b448def0fdf5543, type: 2}
+--- !u!114 &6440360062560695530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6707778877688332463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca0ab0f47684b87a7d4ed89a2be8070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  counter: {fileID: 8644962781648548587}
+  fillSounds:
+  - {fileID: 8300000, guid: 4b70ec0f0afb9ac4ea7dfea07aca4eb4, type: 3}
+  - {fileID: 8300000, guid: 6024ba1d53d005f48a96b3a9f6bacedd, type: 3}
 --- !u!1001 &9168192033999542764
 PrefabInstance:
   m_ObjectHideFlags: 0

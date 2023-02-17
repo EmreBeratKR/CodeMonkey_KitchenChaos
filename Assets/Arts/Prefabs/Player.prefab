@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 949017185722047450}
   - component: {fileID: 949017185722047451}
   - component: {fileID: 949017185722047452}
+  - component: {fileID: 1405452008898278723}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -160,6 +161,33 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1405452008898278723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949017185722047449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38b0ccf30333454fa442054205cd5276, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 949017185722047451}
+  stepSounds:
+  - {fileID: 8300000, guid: 078e15982fce2e147bf06c8a7682f28b, type: 3}
+  - {fileID: 8300000, guid: b2d2893ac04fbdb44a226f4b6ea0d271, type: 3}
+  - {fileID: 8300000, guid: cc97c340134faa948bcaf20fea6429c6, type: 3}
+  - {fileID: 8300000, guid: 64a04bb4fa4ed5d4eac6b0a31f91843a, type: 3}
+  pickupSounds:
+  - {fileID: 8300000, guid: 668de61a04ca5914aa745f8712c62720, type: 3}
+  - {fileID: 8300000, guid: 6728bf8b07482414e99ba965fdd022d8, type: 3}
+  - {fileID: 8300000, guid: 32d29abc86751884081d2005f9ff2676, type: 3}
+  dropSounds:
+  - {fileID: 8300000, guid: 9c88983fa5906dc41944ec5a43b6b5c7, type: 3}
+  - {fileID: 8300000, guid: 331b82ab2c0e2b74d805124d11372c85, type: 3}
+  - {fileID: 8300000, guid: 961379cce253f794abff0d24df806b68, type: 3}
+  stepSoundPerSecond: 6
 --- !u!1 &949017186143378457
 GameObject:
   m_ObjectHideFlags: 0

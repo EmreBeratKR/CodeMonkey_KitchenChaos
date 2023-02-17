@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CounterSystem
 {
-    public class StoveCounterAnimator : MonoBehaviour
+    public class StoveCounterVisual : MonoBehaviour
     {
         private static readonly int IsWarning = Animator.StringToHash("IsWarning");
         

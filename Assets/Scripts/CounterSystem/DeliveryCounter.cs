@@ -14,6 +14,8 @@ namespace CounterSystem
         [SerializeField] private int recipeQueueSize = 3;
 
 
+        public event Action OnDeliverySucceed;
+        public event Action OnDeliveryFailed;
         public event Action<DeliveryQueueChangedArgs> OnDeliveryQueueChanged;
         public struct DeliveryQueueChangedArgs
         {
@@ -59,7 +61,7 @@ namespace CounterSystem
 
             if (!currentRecipe.Matches(deliveredIngredients))
             {
-                Debug.Log("wrong order!");
+                OnDeliveryFailed?.Invoke();
                 return;
             }
 
@@ -68,7 +70,7 @@ namespace CounterSystem
             m_DeliveryQueue.Enqueue(GetRandomRecipe());
             RaiseDeliveryQueueChanged();
 
-            Debug.Log("correct order!");
+            OnDeliverySucceed?.Invoke();
         }
 
         private void RaiseDeliveryQueueChanged()

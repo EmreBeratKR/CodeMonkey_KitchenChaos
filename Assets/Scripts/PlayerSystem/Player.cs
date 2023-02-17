@@ -1,3 +1,4 @@
+using System;
 using CounterSystem;
 using EmreBeratKR.ServiceLocator;
 using KitchenObjectSystem;
@@ -15,11 +16,22 @@ namespace PlayerSystem
         [SerializeField] private float rotationSpeed = 25f;
 
 
+        public event Action OnStartMoving;
+        public event Action OnStopMoving;
+        public event Action<PickupOrDropKitchenObjectArgs> OnPickupKitchenObject; 
+        public event Action<PickupOrDropKitchenObjectArgs> OnDropKitchenObject; 
+        public struct PickupOrDropKitchenObjectArgs
+        {
+            public KitchenObject kitchenObject;
+        }
+        
+
         public bool IsFull => slot.IsFull;
         public bool IsEmpty => slot.IsEmpty;
         
 
         private Counter m_CurrentCounter;
+        private bool m_IsMoving;
         
 
         private void OnEnable()
@@ -45,12 +57,29 @@ namespace PlayerSystem
 
         public void ClearKitchenObject()
         {
+            if (slot.TryGet(out KitchenObject kitchenObject))
+            {
+                OnDropKitchenObject?.Invoke(new PickupOrDropKitchenObjectArgs
+                {
+                    kitchenObject = kitchenObject
+                });
+            }
+            
             slot.Clear();
         }
         
         public bool TryPutKitchenObject(KitchenObject kitchenObject)
         {
-            return slot.TryPut(kitchenObject);
+            var put = slot.TryPut(kitchenObject);
+
+            if (!put) return false;
+            
+            OnPickupKitchenObject?.Invoke(new PickupOrDropKitchenObjectArgs
+            {
+                kitchenObject = kitchenObject
+            });
+
+            return true;
         }
         
         public bool TryGetKitchenObject<T>(out T kitchenObject)
@@ -62,7 +91,16 @@ namespace PlayerSystem
         public bool TryRemoveKitchenObject<T>(out T kitchenObject)
             where T : KitchenObject
         {
-            return slot.TryRemove(out kitchenObject);
+            var removed = slot.TryRemove(out kitchenObject);
+
+            if (!removed) return false;
+            
+            OnDropKitchenObject?.Invoke(new PickupOrDropKitchenObjectArgs
+            {
+                kitchenObject = kitchenObject
+            });
+
+            return true;
         }
 
         public bool ContainsKitchenObject(KitchenObjectSO kitchenObject)
@@ -90,6 +128,7 @@ namespace PlayerSystem
         {
             UpdatePosition(direction);
             UpdateRotation(direction);
+            UpdateMovementState();
             UpdateAnimator();
         }
 
@@ -121,6 +160,23 @@ namespace PlayerSystem
         {
             var forward = Vector3.Slerp(body.transform.forward, direction, Time.deltaTime * rotationSpeed);
             body.transform.forward = forward;
+        }
+        
+        private void UpdateMovementState()
+        {
+            if (body.velocity == Vector3.zero)
+            {
+                if (!m_IsMoving) return;
+                
+                m_IsMoving = false;
+                OnStopMoving?.Invoke();
+                return;
+            }
+            
+            if (m_IsMoving) return;
+
+            m_IsMoving = true;
+            OnStartMoving?.Invoke();
         }
 
         private void UpdateAnimator()

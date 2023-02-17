@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CounterSystem
 {
-    public class CuttingCounterAnimator : MonoBehaviour
+    public class CuttingCounterVisual : MonoBehaviour
     {
         private static readonly int CutID = Animator.StringToHash("Cut");
 

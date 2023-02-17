@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CounterSystem
 {
-    public class TrashCounterAnimator : MonoBehaviour
+    public class TrashCounterVisual : MonoBehaviour
     {
         private static readonly int FillID = Animator.StringToHash("Fill");
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CounterSystem
 {
-    public class ContainerCounterAnimator : MonoBehaviour
+    public class ContainerCounterVisual : MonoBehaviour
     {
         private static readonly int OpenCloseID = Animator.StringToHash("OpenClose");
 
