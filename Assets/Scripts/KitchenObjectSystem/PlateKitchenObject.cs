@@ -1,21 +1,28 @@
+using System;
+using General;
 using UnityEngine;
 
 namespace KitchenObjectSystem
 {
-    public class PlateKitchenObject : KitchenObject
+    public class PlateKitchenObject : KitchenObject, IIngredientListProvider
     {
         [SerializeField] private CompleteRecipeBookSO recipeBook;
 
+        
+        public event Action<IngredientListChangedArgs> OnIngredientListChanged;
+        
 
         public bool IsEmpty => GetIsEmpty();
         
         
         private KitchenObjectSlot[] m_Slots;
+        private KitchenObjectSO[] m_IngredientsBuffer;
 
 
         private void Awake()
         {
             m_Slots = GetComponentsInChildren<KitchenObjectSlot>();
+            m_IngredientsBuffer = new KitchenObjectSO[m_Slots.Length];
         }
 
 
@@ -48,9 +55,30 @@ namespace KitchenObjectSystem
                 
                 kitchenObject.DestroySelf();
             }
+            
+            RaiseIngredientListChanged();
         }
 
 
+        private void RaiseIngredientListChanged()
+        {
+            for (var i = 0; i < m_Slots.Length; i++)
+            {
+                if (m_Slots[i].TryGet(out KitchenObject kitchenObject))
+                {
+                    m_IngredientsBuffer[i] = kitchenObject.Data;
+                    continue;
+                }
+
+                m_IngredientsBuffer[i] = null;
+            }
+            
+            OnIngredientListChanged?.Invoke(new IngredientListChangedArgs
+            {
+                ingredients = m_IngredientsBuffer
+            });
+        }
+        
         private bool IsValidRecipe(CompleteRecipe recipe)
         {
             foreach (var slot in m_Slots)
@@ -86,6 +114,8 @@ namespace KitchenObjectSystem
                 var localPosition = recipe.GetLocalPosition(kitchenObj.Data);
                 kitchenObj.transform.localPosition = localPosition;
             }
+            
+            RaiseIngredientListChanged();
         }
 
         private bool TryPutKitchenObject(KitchenObject kitchenObject)

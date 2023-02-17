@@ -90,7 +90,7 @@ namespace PlayerSystem
         {
             UpdatePosition(direction);
             UpdateRotation(direction);
-            UpdateAnimator(direction);
+            UpdateAnimator();
         }
 
         private void HandleInteraction()
@@ -123,9 +123,9 @@ namespace PlayerSystem
             body.transform.forward = forward;
         }
 
-        private void UpdateAnimator(Vector3 direction)
+        private void UpdateAnimator()
         {
-            animator.IsWalking = direction != Vector3.zero;
+            animator.IsWalking = body.velocity != Vector3.zero;
         }
 
         private static Vector3 GetDirectionNormalized()

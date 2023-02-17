@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 7830480143910402005, guid: a671ee9fd2cac4c60a57a522d67a9263,
         type: 3}
       propertyPath: m_Name
-      value: Progress Bar
+      value: Progress Bar UI
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a671ee9fd2cac4c60a57a522d67a9263, type: 3}
@@ -278,18 +278,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d285d5072fbcc47bb88b6fb02bb60f45, type: 3}
---- !u!114 &2660103165981724301 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 125170694215170491, guid: d285d5072fbcc47bb88b6fb02bb60f45,
-    type: 3}
-  m_PrefabInstance: {fileID: 2690381434719336246}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9401e6a417a14e6498ae7825ddb3dfba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5396315137649461678
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -395,8 +383,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedVisual: {fileID: 4912884334082049676}
-  slots:
-  - {fileID: 2660103165981724301}
   recipeBook: {fileID: 11400000, guid: c2099392631764e4aa937d999633758c, type: 2}
 --- !u!1 &5396315136278389088 stripped
 GameObject:
