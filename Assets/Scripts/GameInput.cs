@@ -16,7 +16,36 @@ public class GameInput : ServiceBehaviour
     {
         var handler = new PlayerInputActions();
         m_PlayerActions = handler.Player;
-       
+        
+        GameManager.OnGameStarted += OnGameStarted;
+    }
+
+    private void OnDestroy()
+    {
+        Disable();
+        
+        GameManager.OnGameStarted -= OnGameStarted;
+    }
+
+
+    private void OnGameStarted()
+    {
+        Enable();
+    }
+    
+    private void OnInteractPerformed(InputAction.CallbackContext context)
+    {
+        OnInteract?.Invoke();
+    }
+    
+    private void OnInteractAlternatePerformed(InputAction.CallbackContext obj)
+    {
+        OnInteractAlternate?.Invoke();
+    }
+
+
+    private void Enable()
+    {
         m_PlayerActions.Move.Enable();
         
         m_PlayerActions.Interact.Enable();
@@ -26,7 +55,7 @@ public class GameInput : ServiceBehaviour
         m_PlayerActions.InteractAlternate.performed += OnInteractAlternatePerformed;
     }
 
-    private void OnDestroy()
+    private void Disable()
     {
         m_PlayerActions.Move.Disable();
 
@@ -35,17 +64,6 @@ public class GameInput : ServiceBehaviour
 
         m_PlayerActions.InteractAlternate.performed -= OnInteractAlternatePerformed;
         m_PlayerActions.InteractAlternate.Disable();
-    }
-
-
-    private void OnInteractPerformed(InputAction.CallbackContext context)
-    {
-        OnInteract?.Invoke();
-    }
-    
-    private void OnInteractAlternatePerformed(InputAction.CallbackContext obj)
-    {
-        OnInteractAlternate?.Invoke();
     }
     
 

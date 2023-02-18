@@ -11,7 +11,7 @@ namespace CounterSystem
     public class DeliveryCounter : Counter, IService
     {
         [SerializeField] private CompleteRecipeBookSO recipeBook;
-        [SerializeField] private int recipeQueueSize = 3;
+        [SerializeField] private int deliveryQueueSize = 3;
 
 
         public event Action OnDeliverySucceed;
@@ -24,17 +24,16 @@ namespace CounterSystem
 
 
         private readonly Queue<CompleteRecipe> m_DeliveryQueue = new();
-        
 
-        private void Start()
+
+        private void OnEnable()
         {
-            for (var i = 0; i < recipeQueueSize; i++)
-            {
-                var randomRecipe = GetRandomRecipe();
-                m_DeliveryQueue.Enqueue(randomRecipe);
-            }
-            
-            RaiseDeliveryQueueChanged();
+            GameManager.OnGameStarted += OnGameStarted;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.OnGameStarted -= OnGameStarted;
         }
 
 
@@ -52,6 +51,23 @@ namespace CounterSystem
         }
 
 
+        private void OnGameStarted()
+        {
+            GetInitialDeliveries();
+        }
+        
+
+        private void GetInitialDeliveries()
+        {
+            for (var i = 0; i < deliveryQueueSize; i++)
+            {
+                var randomRecipe = GetRandomRecipe();
+                m_DeliveryQueue.Enqueue(randomRecipe);
+            }
+            
+            RaiseDeliveryQueueChanged();
+        }
+        
         private void CheckDelivery()
         {
             if (!TryGetKitchenObject(out PlateKitchenObject plate)) return;
