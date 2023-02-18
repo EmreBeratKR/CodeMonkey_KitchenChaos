@@ -23,7 +23,7 @@ namespace CounterSystem
         }
 
 
-        private void OnDeliverySucceed()
+        private void OnDeliverySucceed(DeliveryCounter.DeliverySucceedArgs args)
         {
             GameAudio.PlayClip(successSounds.Random());
         }

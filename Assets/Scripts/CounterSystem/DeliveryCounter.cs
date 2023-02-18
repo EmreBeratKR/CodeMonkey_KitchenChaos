@@ -14,9 +14,13 @@ namespace CounterSystem
         [SerializeField] private int deliveryQueueSize = 3;
 
 
-        public event Action OnDeliverySucceed;
+        public event Action<DeliverySucceedArgs> OnDeliverySucceed;
         public event Action OnDeliveryFailed;
         public event Action<DeliveryQueueChangedArgs> OnDeliveryQueueChanged;
+        public struct DeliverySucceedArgs
+        {
+            public int deliveredRecipeCount;
+        }
         public struct DeliveryQueueChangedArgs
         {
             public Queue<CompleteRecipe> deliveryQueue;
@@ -24,6 +28,7 @@ namespace CounterSystem
 
 
         private readonly Queue<CompleteRecipe> m_DeliveryQueue = new();
+        private int m_DeliveredRecipeCount;
 
 
         private void OnEnable()
@@ -86,7 +91,11 @@ namespace CounterSystem
             m_DeliveryQueue.Enqueue(GetRandomRecipe());
             RaiseDeliveryQueueChanged();
 
-            OnDeliverySucceed?.Invoke();
+            m_DeliveredRecipeCount += 1;
+            OnDeliverySucceed?.Invoke(new DeliverySucceedArgs
+            {
+                deliveredRecipeCount = m_DeliveredRecipeCount
+            });
         }
 
         private void RaiseDeliveryQueueChanged()

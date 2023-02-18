@@ -18,6 +18,7 @@ public class GameInput : ServiceBehaviour
         m_PlayerActions = handler.Player;
         
         GameManager.OnGameStarted += OnGameStarted;
+        GameManager.OnGameOver += OnGameOver;
     }
 
     private void OnDestroy()
@@ -25,6 +26,7 @@ public class GameInput : ServiceBehaviour
         Disable();
         
         GameManager.OnGameStarted -= OnGameStarted;
+        GameManager.OnGameOver -= OnGameOver;
     }
 
 
@@ -32,7 +34,12 @@ public class GameInput : ServiceBehaviour
     {
         Enable();
     }
-    
+
+    private void OnGameOver()
+    {
+        Disable();
+    }
+
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
         OnInteract?.Invoke();
