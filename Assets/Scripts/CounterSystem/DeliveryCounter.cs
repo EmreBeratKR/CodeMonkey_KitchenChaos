@@ -8,6 +8,7 @@ using UnityEngine;
 namespace CounterSystem
 {
     [ServiceSceneLoad(ServiceSceneLoadMode.Destroy)]
+    [ServiceRegistration(ServiceRegistrationMode.DoNotAutoRegister)]
     public class DeliveryCounter : Counter, IService
     {
         [SerializeField] private CompleteRecipeBookSO recipeBook;
@@ -30,6 +31,11 @@ namespace CounterSystem
         private readonly Queue<CompleteRecipe> m_DeliveryQueue = new();
         private int m_DeliveredRecipeCount;
 
+
+        protected override void Awake()
+        {
+            ServiceLocator.Register(this);
+        }
 
         private void OnEnable()
         {
