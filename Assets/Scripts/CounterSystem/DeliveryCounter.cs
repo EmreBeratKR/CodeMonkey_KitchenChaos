@@ -34,7 +34,8 @@ namespace CounterSystem
 
         protected override void Awake()
         {
-            ServiceLocator.Register(this);
+            base.Awake();
+            ServiceLocator.Register(this, true);
         }
 
         private void OnEnable()
