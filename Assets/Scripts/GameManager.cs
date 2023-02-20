@@ -1,11 +1,15 @@
 using System;
+using EmreBeratKR.ServiceLocator;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : ServiceBehaviour
 {
+    public static event Action OnBeginInitialize;
     public static event Action OnBeginCountdown;
     public static event Action OnGameStarted;
     public static event Action OnGameOver;
+    public static event Action OnPaused;
+    public static event Action OnUnPaused;
     public static event Action<TimerTickArgs> OnGameTimerTick;
     public struct TimerTickArgs
     {
@@ -35,21 +39,22 @@ public class GameManager : MonoBehaviour
     private State m_State;
 
 
-#if UNITY_EDITOR
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void Init()
+    private void OnEnable()
     {
-        OnBeginCountdown = null;
+        ServiceLocator
+            .Get<GameInput>()
+            .OnPause += OnPauseInput;
+
+        SceneLoader.OnSceneLoaded += OnSceneLoaded;
     }
-    
-#endif
-    
 
-    private void Start()
+    private void OnDisable()
     {
-        const float waitToStartTimer = 1f;
-        SetTimer(waitToStartTimer);
+        ServiceLocator
+            .Get<GameInput>()
+            .OnPause -= OnPauseInput;
+        
+        SceneLoader.OnSceneLoaded -= OnSceneLoaded;
     }
 
     private void Update()
@@ -57,6 +62,41 @@ public class GameManager : MonoBehaviour
         UpdateState();
     }
 
+
+    public void Resume()
+    {
+        OnPauseInput();
+    }
+
+
+    private void OnSceneLoaded(SceneLoader.SceneLoadedArgs args)
+    {
+        m_State = args.scene switch
+        {
+            Scene.MainMenu => State.MainMenu,
+            _ => State.WaitingToStart
+        };
+        
+        if (m_State == State.WaitingToStart)
+        {
+            InitializeGame();
+        }
+    }
+    
+    private void OnPauseInput()
+    {
+        switch (m_State)
+        {
+            case State.Paused:
+                UnPause();
+                return;
+            
+            case State.Playing:
+                Pause();
+                break;
+        }
+    }
+    
 
     private void UpdateState()
     {
@@ -74,6 +114,14 @@ public class GameManager : MonoBehaviour
                 UpdateStatePlaying();
                 break;
         }
+    }
+
+    private void InitializeGame()
+    {
+        OnBeginInitialize?.Invoke();
+        
+        const float waitToStartTimer = 1f;
+        SetTimer(waitToStartTimer);
     }
 
     private void UpdateStateWaitingToStart()
@@ -126,12 +174,28 @@ public class GameManager : MonoBehaviour
         });
     }
 
+    private void Pause()
+    {
+        Time.timeScale = 0f;
+        m_State = State.Paused;
+        OnPaused?.Invoke();
+    }
+
+    private void UnPause()
+    {
+        Time.timeScale = 1f;
+        m_State = State.Playing;
+        OnUnPaused?.Invoke();
+    }
+
 
     private enum State
     {
+        MainMenu,
         WaitingToStart,
         Countdown,
         Playing,
-        GameOver
+        GameOver,
+        Paused
     }
 }

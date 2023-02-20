@@ -10,9 +10,15 @@ public class SceneLoader : ServiceBehaviour, IProgressProvider
     [SerializeField] private GameObject main;
     
     
+    public static event Action<SceneLoadedArgs> OnSceneLoaded; 
+    public struct SceneLoadedArgs
+    {
+        public Scene scene;
+    }
+    
     public event Action<ProgressChangedArgs> OnProgressChanged;
-    
-    
+
+
     public void LoadScene(Scene scene)
     {
         var operation = SceneManager.LoadSceneAsync((int) scene);
@@ -33,6 +39,11 @@ public class SceneLoader : ServiceBehaviour, IProgressProvider
             }
             
             main.gameObject.SetActive(false);
+            
+            OnSceneLoaded?.Invoke(new SceneLoadedArgs
+            {
+                scene = scene
+            });
         }
     }
 }

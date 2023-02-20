@@ -10,6 +10,7 @@ public class GameInput : ServiceBehaviour
 
     public event Action OnInteract;
     public event Action OnInteractAlternate;
+    public event Action OnPause;
     
 
     private void Awake()
@@ -17,25 +18,32 @@ public class GameInput : ServiceBehaviour
         var handler = new PlayerInputActions();
         m_PlayerActions = handler.Player;
         
-        GameManager.OnGameStarted += OnGameStarted;
-        GameManager.OnGameOver += OnGameOver;
+        GameManager.OnBeginInitialize += GameManager_OnBeginInitialize;
+        GameManager.OnGameStarted += GameManager_OnGameStarted;
+        GameManager.OnGameOver += GameManager_OnGameOver;
     }
 
     private void OnDestroy()
     {
         Disable();
-        
-        GameManager.OnGameStarted -= OnGameStarted;
-        GameManager.OnGameOver -= OnGameOver;
+
+        GameManager.OnBeginInitialize -= GameManager_OnBeginInitialize;
+        GameManager.OnGameStarted -= GameManager_OnGameStarted;
+        GameManager.OnGameOver -= GameManager_OnGameOver;
     }
 
 
-    private void OnGameStarted()
+    private void GameManager_OnBeginInitialize()
+    {
+        Disable();
+    }
+    
+    private void GameManager_OnGameStarted()
     {
         Enable();
     }
 
-    private void OnGameOver()
+    private void GameManager_OnGameOver()
     {
         Disable();
     }
@@ -45,9 +53,14 @@ public class GameInput : ServiceBehaviour
         OnInteract?.Invoke();
     }
     
-    private void OnInteractAlternatePerformed(InputAction.CallbackContext obj)
+    private void OnInteractAlternatePerformed(InputAction.CallbackContext context)
     {
         OnInteractAlternate?.Invoke();
+    }
+
+    private void OnPausePerformed(InputAction.CallbackContext context)
+    {
+        OnPause?.Invoke();
     }
 
 
@@ -60,6 +73,9 @@ public class GameInput : ServiceBehaviour
         
         m_PlayerActions.InteractAlternate.Enable();
         m_PlayerActions.InteractAlternate.performed += OnInteractAlternatePerformed;
+
+        m_PlayerActions.Pause.Enable();
+        m_PlayerActions.Pause.performed += OnPausePerformed;
     }
 
     private void Disable()
@@ -71,6 +87,9 @@ public class GameInput : ServiceBehaviour
 
         m_PlayerActions.InteractAlternate.performed -= OnInteractAlternatePerformed;
         m_PlayerActions.InteractAlternate.Disable();
+        
+        m_PlayerActions.Pause.Disable();
+        m_PlayerActions.Pause.performed -= OnPausePerformed;
     }
     
 
