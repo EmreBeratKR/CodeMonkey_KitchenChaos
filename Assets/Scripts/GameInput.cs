@@ -21,31 +21,35 @@ public class GameInput : ServiceBehaviour
         GameManager.OnBeginInitialize += GameManager_OnBeginInitialize;
         GameManager.OnGameStarted += GameManager_OnGameStarted;
         GameManager.OnGameOver += GameManager_OnGameOver;
+        
+        EnableGeneralInputs();
     }
 
     private void OnDestroy()
     {
-        Disable();
+        DisablePlayerInputs();
 
         GameManager.OnBeginInitialize -= GameManager_OnBeginInitialize;
         GameManager.OnGameStarted -= GameManager_OnGameStarted;
         GameManager.OnGameOver -= GameManager_OnGameOver;
+        
+        DisableGeneralInputs();
     }
 
 
     private void GameManager_OnBeginInitialize()
     {
-        Disable();
+        DisablePlayerInputs();
     }
     
     private void GameManager_OnGameStarted()
     {
-        Enable();
+        EnablePlayerInputs();
     }
 
     private void GameManager_OnGameOver()
     {
-        Disable();
+        DisablePlayerInputs();
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
@@ -64,7 +68,7 @@ public class GameInput : ServiceBehaviour
     }
 
 
-    private void Enable()
+    private void EnablePlayerInputs()
     {
         m_PlayerActions.Move.Enable();
         
@@ -73,12 +77,9 @@ public class GameInput : ServiceBehaviour
         
         m_PlayerActions.InteractAlternate.Enable();
         m_PlayerActions.InteractAlternate.performed += OnInteractAlternatePerformed;
-
-        m_PlayerActions.Pause.Enable();
-        m_PlayerActions.Pause.performed += OnPausePerformed;
     }
 
-    private void Disable()
+    private void DisablePlayerInputs()
     {
         m_PlayerActions.Move.Disable();
 
@@ -87,7 +88,16 @@ public class GameInput : ServiceBehaviour
 
         m_PlayerActions.InteractAlternate.performed -= OnInteractAlternatePerformed;
         m_PlayerActions.InteractAlternate.Disable();
-        
+    }
+
+    private void EnableGeneralInputs()
+    {
+        m_PlayerActions.Pause.Enable();
+        m_PlayerActions.Pause.performed += OnPausePerformed;
+    }
+
+    private void DisableGeneralInputs()
+    {
         m_PlayerActions.Pause.Disable();
         m_PlayerActions.Pause.performed -= OnPausePerformed;
     }

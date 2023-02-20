@@ -38,6 +38,17 @@ namespace UI
                 .Resume();
         }
 
+        public void OnClickedRestart()
+        {
+            ServiceLocator
+                .Get<GameManager>()
+                .Resume();
+            
+            ServiceLocator
+                .Get<SceneLoader>()
+                .LoadScene(Scene.Game);
+        }
+
         public void OnClickedMainMenu()
         {
             ServiceLocator

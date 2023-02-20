@@ -36,6 +36,7 @@ public class GameManager : ServiceBehaviour
     
     private float m_TimerStart;
     private float m_Timer;
+    private State m_PausedState;
     private State m_State;
 
 
@@ -89,7 +90,15 @@ public class GameManager : ServiceBehaviour
         {
             case State.Paused:
                 UnPause();
-                return;
+                break;
+            
+            case State.WaitingToStart:
+                Pause();
+                break;
+            
+            case State.Countdown:
+                Pause();
+                break;
             
             case State.Playing:
                 Pause();
@@ -177,6 +186,7 @@ public class GameManager : ServiceBehaviour
     private void Pause()
     {
         Time.timeScale = 0f;
+        m_PausedState = m_State;
         m_State = State.Paused;
         OnPaused?.Invoke();
     }
@@ -184,7 +194,7 @@ public class GameManager : ServiceBehaviour
     private void UnPause()
     {
         Time.timeScale = 1f;
-        m_State = State.Playing;
+        m_State = m_PausedState;
         OnUnPaused?.Invoke();
     }
 

@@ -14,6 +14,7 @@ namespace UI
         private void OnEnable()
         {
             GameManager.OnGameOver += OnGameOver;
+            
             ServiceLocator
                 .Get<DeliveryCounter>()
                 .OnDeliverySucceed += OnDeliverySucceed;
@@ -22,11 +23,31 @@ namespace UI
         private void OnDisable()
         {
             GameManager.OnGameOver -= OnGameOver;
+            
             ServiceLocator
                 .Get<DeliveryCounter>()
                 .OnDeliverySucceed -= OnDeliverySucceed;
         }
 
+
+        public void OnClickedRestart()
+        {
+            ServiceLocator
+                .Get<SceneLoader>()
+                .LoadScene(Scene.Game);
+        }
+
+        public void OnClickedMainMenu()
+        {
+            ServiceLocator
+                .Get<GameManager>()
+                .Resume();
+            
+            ServiceLocator
+                .Get<SceneLoader>()
+                .LoadScene(Scene.MainMenu);
+        }
+        
 
         private void OnGameOver()
         {
