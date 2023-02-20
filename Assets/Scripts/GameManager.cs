@@ -12,6 +12,7 @@ public class GameManager : ServiceBehaviour
     public static event Action OnCompleteTutorial;
     public static event Action OnPaused;
     public static event Action OnUnPaused;
+    public static event Action OnUnPauseInput;
     public static event Action<TimerTickArgs> OnGameTimerTick;
     public struct TimerTickArgs
     {
@@ -56,6 +57,8 @@ public class GameManager : ServiceBehaviour
             .OnPause += OnPauseInput;
 
         SceneLoader.OnSceneLoaded += OnSceneLoaded;
+
+        UIManager.OnAllMenusClosed += OnAllMenusClosed;
     }
 
     private void OnDisable()
@@ -69,6 +72,8 @@ public class GameManager : ServiceBehaviour
             .OnPause -= OnPauseInput;
         
         SceneLoader.OnSceneLoaded -= OnSceneLoaded;
+        
+        UIManager.OnAllMenusClosed -= OnAllMenusClosed;
     }
 
     private void Update()
@@ -97,6 +102,11 @@ public class GameManager : ServiceBehaviour
         }
     }
 
+    private void OnAllMenusClosed()
+    {
+        UnPause();
+    }
+
     private void OnConfirmInput()
     {
         if (m_State != State.WaitingForTutorial) return;
@@ -109,7 +119,7 @@ public class GameManager : ServiceBehaviour
         switch (m_State)
         {
             case State.Paused:
-                UnPause();
+                OnUnPauseInput?.Invoke();
                 break;
             
             case State.WaitingToStart:

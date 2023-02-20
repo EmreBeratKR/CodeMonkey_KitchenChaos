@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace UI
 {
-    public class PauseUI : MonoBehaviour
+    public class PauseUI : MonoBehaviour, IMenu
     {
+        [SerializeField] private SettingsUI settings;
         [SerializeField] private GameObject main;
 
 
@@ -22,12 +23,12 @@ namespace UI
 
         private void OnGamePaused()
         {
-            Show();
+            Open();
         }
         
         private void OnGameUnPaused()
         {
-            Hide();
+            Close();
         }
 
 
@@ -49,6 +50,13 @@ namespace UI
                 .LoadScene(Scene.Game);
         }
 
+        public void OnClickedSettings()
+        {
+            if (!settings) return;
+            
+            settings.Open();
+        }
+
         public void OnClickedMainMenu()
         {
             ServiceLocator
@@ -61,12 +69,16 @@ namespace UI
         }
         
 
-        private void Show()
+        private void Open()
         {
             main.SetActive(true);
+            
+            ServiceLocator
+                .Get<UIManager>()
+                .PushMenu(this);
         }
 
-        private void Hide()
+        public void Close()
         {
             main.SetActive(false);
         }

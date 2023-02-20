@@ -5,22 +5,38 @@ using UnityEngine.InputSystem;
 
 public class GameInput : ServiceBehaviour
 {
-    private PlayerInputActions.PlayerActions m_PlayerActions;
-
+    private const string BindingsSaveKey = "Bindings";
 
     public event Action OnInteract;
     public event Action OnInteractAlternate;
     public event Action OnConfirm;
     public event Action OnPause;
+
+
+    private static string BindingsAsJson
+    {
+        get => PlayerPrefs.GetString(BindingsSaveKey);
+        set => PlayerPrefs.SetString(BindingsSaveKey, value);
+    }
+    
+    
+    private PlayerInputActions.PlayerActions m_PlayerActions;
+    private PlayerInputActions m_Actions;
     
 
     private void Awake()
     {
-        var handler = new PlayerInputActions();
-        m_PlayerActions = handler.Player;
+        m_Actions = new PlayerInputActions();
+        m_PlayerActions = m_Actions.Player;
+
+        if (PlayerPrefs.HasKey(BindingsSaveKey))
+        {
+            m_Actions.LoadBindingOverridesFromJson(BindingsAsJson);
+        }
         
         GameManager.OnGameStarted += GameManager_OnGameStarted;
         GameManager.OnGameOver += GameManager_OnGameOver;
+        GameManager.OnUnPaused += GameManager_OnUnPaused;
 
         SceneLoader.OnSceneLoaded += OnSceneLoaded;
 
@@ -33,6 +49,7 @@ public class GameInput : ServiceBehaviour
         
         GameManager.OnGameStarted -= GameManager_OnGameStarted;
         GameManager.OnGameOver -= GameManager_OnGameOver;
+        GameManager.OnUnPaused -= GameManager_OnUnPaused;
         
         SceneLoader.OnSceneLoaded -= OnSceneLoaded;
         
@@ -40,6 +57,101 @@ public class GameInput : ServiceBehaviour
     }
 
 
+    public Vector3 GetDirectionNormalized()
+    {
+        var value = m_PlayerActions.Move.ReadValue<Vector2>();
+        return new Vector3(value.x, 0f, value.y);
+    }
+
+    public void Rebind(KeyBinding keyBinding, Action onComplete, Action onCancel)
+    {
+        DisableGeneralInputs();
+        DisablePlayerInputs();
+
+        InputAction inputAction;
+        int bindingIndex;
+        
+        switch (keyBinding)
+        {
+            default:
+            
+            case KeyBinding.MoveUp:
+                inputAction = m_PlayerActions.Move;
+                bindingIndex = 1;
+                break;
+            
+            case KeyBinding.MoveDown:
+                inputAction = m_PlayerActions.Move;
+                bindingIndex = 2;
+                break;
+            
+            case KeyBinding.MoveLeft:
+                inputAction = m_PlayerActions.Move;
+                bindingIndex = 3;
+                break;
+            
+            case KeyBinding.MoveRight:
+                inputAction = m_PlayerActions.Move;
+                bindingIndex = 4;
+                break;
+            
+            case KeyBinding.Interact:
+                inputAction = m_PlayerActions.Interact;
+                bindingIndex = 0;
+                break;
+            
+            case KeyBinding.InteractAlternate:
+                inputAction = m_PlayerActions.InteractAlternate;
+                bindingIndex = 0;
+                break;
+        }
+        
+        inputAction.PerformInteractiveRebinding(bindingIndex)
+            .OnCancel(callback =>
+            {
+                callback.Dispose();
+                onCancel?.Invoke();
+            })
+            .OnComplete(callback =>
+            {
+                callback.Dispose();
+                BindingsAsJson = m_Actions.SaveBindingOverridesAsJson();
+                EnableGeneralInputs();
+                EnablePlayerInputs();
+                onComplete?.Invoke();
+            })
+            .Start();
+    }
+
+    public string KeyBindingToKeyName(KeyBinding keyBinding)
+    {
+        return keyBinding switch
+        {
+            KeyBinding.MoveUp => m_PlayerActions.Move.bindings[1].ToDisplayString(),
+            KeyBinding.MoveDown => m_PlayerActions.Move.bindings[2].ToDisplayString(),
+            KeyBinding.MoveLeft => m_PlayerActions.Move.bindings[3].ToDisplayString(),
+            KeyBinding.MoveRight => m_PlayerActions.Move.bindings[4].ToDisplayString(),
+            KeyBinding.Interact => m_PlayerActions.Interact.bindings[0].ToDisplayString(),
+            KeyBinding.InteractAlternate => m_PlayerActions.InteractAlternate.bindings[0].ToDisplayString(),
+            _ => "[?]",
+        };
+    }
+
+    public string KeyBindingToName(KeyBinding keyBinding)
+    {
+        return keyBinding switch
+        {
+            KeyBinding.MoveUp => "Move Up",
+            KeyBinding.MoveDown => "Move Down",
+            KeyBinding.MoveLeft => "Move Left",
+            KeyBinding.MoveRight => "Move Right",
+            KeyBinding.Interact => "Interact",
+            KeyBinding.InteractAlternate => "Interact Alternate",
+            _ => "Unknown"
+        };
+    }
+    
+    
     private void OnSceneLoaded(SceneLoader.SceneLoadedArgs args)
     {
         DisablePlayerInputs();
@@ -53,6 +165,16 @@ public class GameInput : ServiceBehaviour
     private void GameManager_OnGameOver()
     {
         DisablePlayerInputs();
+    }
+
+    private void GameManager_OnUnPaused()
+    {
+        if (!ServiceLocator
+            .Get<GameManager>()
+            .IsGameStarted)
+        {
+            DisablePlayerInputs();
+        }
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
@@ -115,11 +237,14 @@ public class GameInput : ServiceBehaviour
         m_PlayerActions.Pause.Disable();
         m_PlayerActions.Pause.performed -= OnPausePerformed;
     }
-    
+}
 
-    public Vector3 GetDirectionNormalized()
-    {
-        var value = m_PlayerActions.Move.ReadValue<Vector2>();
-        return new Vector3(value.x, 0f, value.y);
-    }
+public enum KeyBinding
+{
+    MoveUp,
+    MoveDown,
+    MoveLeft,
+    MoveRight,
+    Interact,
+    InteractAlternate
 }
