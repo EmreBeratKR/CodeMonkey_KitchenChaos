@@ -5,8 +5,12 @@ namespace UI
 {
     public class CountdownUI : MonoBehaviour
     {
-        [SerializeField] private GameObject counterMain;
+        private const string Go = "GO!";
+        private static readonly int CountID = Animator.StringToHash("Count");
+        
+        
         [SerializeField] private TMP_Text counterField;
+        [SerializeField] private Animator animator;
 
 
         private void OnEnable()
@@ -19,23 +23,38 @@ namespace UI
         {
             GameManager.OnBeginCountdown -= OnBeginCountdown;
             GameManager.OnGameStarted -= OnGameStarted;
+            GameManager.OnGameTimerTick -= OnTimerTick;
         }
 
         private void OnBeginCountdown()
         {
             GameManager.OnGameTimerTick += OnTimerTick;
-            counterMain.SetActive(true);
         }
 
         private void OnGameStarted()
         {
             GameManager.OnGameTimerTick -= OnTimerTick;
-            counterMain.SetActive(false);
+            
+            counterField.text = Go;
+            TriggerCount();
         }
 
         private void OnTimerTick(GameManager.TimerTickArgs args)
         {
-            counterField.text = Mathf.CeilToInt(args.remainingTime).ToString();
+            var oldText = counterField.text;
+            var newText = Mathf.CeilToInt(args.remainingTime).ToString();
+            counterField.text = newText;
+
+            if (newText != oldText)
+            {
+                TriggerCount();
+            }
+        }
+
+
+        private void TriggerCount()
+        {
+            animator.SetTrigger(CountID);
         }
     }
 }
