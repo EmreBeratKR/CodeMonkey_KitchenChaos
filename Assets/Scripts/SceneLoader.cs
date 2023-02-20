@@ -30,8 +30,6 @@ public class SceneLoader : ServiceBehaviour, IProgressProvider
             
             while (!operation.isDone)
             {
-                Debug.Log(operation.progress);
-                
                 OnProgressChanged?.Invoke(new ProgressChangedArgs
                 {
                     progressNormalized = operation.progress
