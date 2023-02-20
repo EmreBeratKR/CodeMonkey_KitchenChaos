@@ -10,6 +10,7 @@ public class GameInput : ServiceBehaviour
 
     public event Action OnInteract;
     public event Action OnInteractAlternate;
+    public event Action OnConfirm;
     public event Action OnPause;
     
 
@@ -18,26 +19,28 @@ public class GameInput : ServiceBehaviour
         var handler = new PlayerInputActions();
         m_PlayerActions = handler.Player;
         
-        GameManager.OnBeginInitialize += GameManager_OnBeginInitialize;
         GameManager.OnGameStarted += GameManager_OnGameStarted;
         GameManager.OnGameOver += GameManager_OnGameOver;
-        
+
+        SceneLoader.OnSceneLoaded += OnSceneLoaded;
+
         EnableGeneralInputs();
     }
 
     private void OnDestroy()
     {
         DisablePlayerInputs();
-
-        GameManager.OnBeginInitialize -= GameManager_OnBeginInitialize;
+        
         GameManager.OnGameStarted -= GameManager_OnGameStarted;
         GameManager.OnGameOver -= GameManager_OnGameOver;
+        
+        SceneLoader.OnSceneLoaded -= OnSceneLoaded;
         
         DisableGeneralInputs();
     }
 
 
-    private void GameManager_OnBeginInitialize()
+    private void OnSceneLoaded(SceneLoader.SceneLoadedArgs args)
     {
         DisablePlayerInputs();
     }
@@ -62,6 +65,11 @@ public class GameInput : ServiceBehaviour
         OnInteractAlternate?.Invoke();
     }
 
+    private void OnConfirmPerformed(InputAction.CallbackContext context)
+    {
+        OnConfirm?.Invoke();
+    }
+    
     private void OnPausePerformed(InputAction.CallbackContext context)
     {
         OnPause?.Invoke();
@@ -92,12 +100,18 @@ public class GameInput : ServiceBehaviour
 
     private void EnableGeneralInputs()
     {
+        m_PlayerActions.Confirm.Enable();
+        m_PlayerActions.Confirm.performed += OnConfirmPerformed;
+        
         m_PlayerActions.Pause.Enable();
         m_PlayerActions.Pause.performed += OnPausePerformed;
     }
 
     private void DisableGeneralInputs()
     {
+        m_PlayerActions.Confirm.Enable();
+        m_PlayerActions.Confirm.performed -= OnConfirmPerformed;
+        
         m_PlayerActions.Pause.Disable();
         m_PlayerActions.Pause.performed -= OnPausePerformed;
     }

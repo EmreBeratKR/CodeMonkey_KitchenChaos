@@ -8,6 +8,8 @@ public class GameManager : ServiceBehaviour
     public static event Action OnBeginCountdown;
     public static event Action OnGameStarted;
     public static event Action OnGameOver;
+    public static event Action OnBeginTutorial;
+    public static event Action OnCompleteTutorial;
     public static event Action OnPaused;
     public static event Action OnUnPaused;
     public static event Action<TimerTickArgs> OnGameTimerTick;
@@ -32,6 +34,9 @@ public class GameManager : ServiceBehaviour
             return Mathf.InverseLerp(0f, GetTotalTime(), remainingTime);
         }
     }
+
+
+    public bool IsGameStarted => m_State == State.Playing;
     
     
     private float m_TimerStart;
@@ -44,6 +49,10 @@ public class GameManager : ServiceBehaviour
     {
         ServiceLocator
             .Get<GameInput>()
+            .OnConfirm += OnConfirmInput;
+        
+        ServiceLocator
+            .Get<GameInput>()
             .OnPause += OnPauseInput;
 
         SceneLoader.OnSceneLoaded += OnSceneLoaded;
@@ -51,6 +60,10 @@ public class GameManager : ServiceBehaviour
 
     private void OnDisable()
     {
+        ServiceLocator
+            .Get<GameInput>()
+            .OnConfirm -= OnConfirmInput;
+        
         ServiceLocator
             .Get<GameInput>()
             .OnPause -= OnPauseInput;
@@ -75,13 +88,20 @@ public class GameManager : ServiceBehaviour
         m_State = args.scene switch
         {
             Scene.MainMenu => State.MainMenu,
-            _ => State.WaitingToStart
+            _ => State.WaitingForTutorial
         };
-        
-        if (m_State == State.WaitingToStart)
+
+        if (m_State == State.WaitingForTutorial)
         {
-            InitializeGame();
+            OnBeginTutorial?.Invoke();
         }
+    }
+
+    private void OnConfirmInput()
+    {
+        if (m_State != State.WaitingForTutorial) return;
+        
+        CompleteTutorial();
     }
     
     private void OnPauseInput()
@@ -125,11 +145,19 @@ public class GameManager : ServiceBehaviour
         }
     }
 
+    private void CompleteTutorial()
+    {
+        InitializeGame();
+        OnCompleteTutorial?.Invoke();
+    }
+    
     private void InitializeGame()
     {
+        m_State = State.WaitingToStart;
+        
         OnBeginInitialize?.Invoke();
         
-        const float waitToStartTimer = 1f;
+        const float waitToStartTimer = 0.25f;
         SetTimer(waitToStartTimer);
     }
 
@@ -202,6 +230,7 @@ public class GameManager : ServiceBehaviour
     private enum State
     {
         MainMenu,
+        WaitingForTutorial,
         WaitingToStart,
         Countdown,
         Playing,
