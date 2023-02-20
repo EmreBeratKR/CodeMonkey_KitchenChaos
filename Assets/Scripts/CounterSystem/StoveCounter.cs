@@ -32,8 +32,20 @@ namespace CounterSystem
         }
 
 
+        private void OnEnable()
+        {
+            GameManager.OnGameOver += GameManager_OnGameOver;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.OnGameOver -= GameManager_OnGameOver;
+        }
+
         private void Update()
         {
+            if (m_State == State.Suspended) return;
+            
             if (!TryCook())
             {
                 if (m_State != State.Cooking) return;
@@ -50,7 +62,20 @@ namespace CounterSystem
             m_State = State.Cooking;
             OnBeginCooking?.Invoke();
         }
+        
+        
+        private void GameManager_OnGameOver()
+        {
+            Suspend();
+        }
 
+
+        private void Suspend()
+        {
+            m_State = State.Suspended;
+            OnStopCooking?.Invoke();
+        }
+        
         private bool TryCook()
         {
             if (!TryGetKitchenObject(out KitchenObject kitchenObject))
@@ -117,7 +142,8 @@ namespace CounterSystem
         private enum State
         {
             Idle,
-            Cooking
+            Cooking,
+            Suspended
         }
     }
 }
